@@ -3,7 +3,7 @@
     ──「 ᴄʜᴀᴛʙᴏᴛ 」──
 </h2>
 <p align="center">
-  <img src="https://graph.org/file/570e6b36b6962d8f369a2.jpg">
+  <img src="https://i.ibb.co/wNRdVdnL/file-3604.jpg">
 </p>
 <h2 align="center"> ──「 ᴅᴇᴍᴏ ʀᴏʙᴏᴛ 」──</h2>
 <i>ᴀʟʟ ᴛʜᴇ ᴄᴜsᴛᴏᴍɪsᴀᴛɪᴏɴs ᴀʀᴇ ᴀᴠᴀɪʟᴀʙʟᴇ. ᴊᴜsᴛ ᴄʜᴇᴄᴋᴏᴜᴛ ᴛʜᴇ ʀᴇᴘᴏ ᴀɴᴅ ᴠᴀʀɪᴀʙʟᴇs.</i>
