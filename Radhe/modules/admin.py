@@ -25,15 +25,21 @@ def get_target_user(message: Message):
     return None
 
 # =========================
+# Prefix filter: Radhe <command>
+# =========================
+def radhe_command(cmd_name):
+    return filters.text & filters.regex(rf"(?i)^Radhe {cmd_name}$")
+
+# =========================
 # Ban command
 # =========================
-@Radhe.on_message(filters.command("ban") & filters.group)
+@Radhe.on_message(radhe_command("ban") & filters.group)
 async def ban_user(_, message: Message):
     if not is_allowed_user(message.from_user.id):
         return await message.reply("😏 **ʏσυ ¢αη'τ υѕє τнιѕ ¢σммαη∂**")
     user_id = get_target_user(message)
     if not user_id:
-        return await message.reply("**❌ яєρℓу тσ α υѕєя σя gινє υѕєяι∂/υѕєяηαмє**")
+        return await message.reply("**❌ яєρℓу τσ α υѕєя σя gιvє υѕєяι∂/υѕєяηαмє**")
     try:
         await message.chat.ban_member(user_id)
         await message.reply("🚫 **υѕєя вαηηє∂ ѕυccєѕѕƒυℓℓγ**")
@@ -43,13 +49,13 @@ async def ban_user(_, message: Message):
 # =========================
 # Unban command
 # =========================
-@Radhe.on_message(filters.command("unban") & filters.group)
+@Radhe.on_message(radhe_command("unban") & filters.group)
 async def unban_user(_, message: Message):
     if not is_allowed_user(message.from_user.id):
-        return await message.reply(""😏**ʏσυ ¢αη'τ υѕє τнιѕ ¢σммαη∂**"")
+        return await message.reply("😏 **ʏσυ ¢αη'τ υѕє τнιѕ ¢σммαη∂**")
     user_id = get_target_user(message)
     if not user_id:
-        return await message.reply("**❌ яєρℓу тσ α υѕєя σя gινє υѕєяι∂/υѕєяηαмє**")
+        return await message.reply("**❌ яєρℓу τσ α υѕєя σя gιvє υѕєяι∂/υѕєяηαмє**")
     try:
         await message.chat.unban_member(user_id)
         await message.reply("✅ **υѕєя υηвαηηє∂ ѕυccєѕѕƒυℓℓγ**")
@@ -59,13 +65,13 @@ async def unban_user(_, message: Message):
 # =========================
 # Mute command
 # =========================
-@Radhe.on_message(filters.command("mute") & filters.group)
+@Radhe.on_message(radhe_command("mute") & filters.group)
 async def mute_user(_, message: Message):
     if not is_allowed_user(message.from_user.id):
         return await message.reply("😏 **ʏσυ ¢αη'τ υѕє τнιѕ ¢σммαη∂**")
     user_id = get_target_user(message)
     if not user_id:
-        return await message.reply("❌ **яєρℓу тσ α υѕєя σя gιvє υѕєяι∂/υѕєяηαмє**")
+        return await message.reply("❌ **яєρℓу τσ α υѕєя σя gιvє υѕєяι∂/υѕєяηαмє**")
     try:
         await message.chat.restrict_member(user_id, ChatPermissions())
         await message.reply("🔇 **υѕєя мυтє∂ ѕυccєѕѕƒυℓℓγ**")
@@ -75,13 +81,13 @@ async def mute_user(_, message: Message):
 # =========================
 # Unmute command
 # =========================
-@Radhe.on_message(filters.command("unmute") & filters.group)
+@Radhe.on_message(radhe_command("unmute") & filters.group)
 async def unmute_user(_, message: Message):
     if not is_allowed_user(message.from_user.id):
         return await message.reply("😏 **ʏσυ ¢αη'τ υѕє τнιѕ ¢σммαη∂**")
     user_id = get_target_user(message)
     if not user_id:
-        return await message.reply("❌ **яєρℓу тσ α υѕєя σя gιvє υѕєяι∂/υѕєяηαмє**")
+        return await message.reply("❌ **яєρℓу τσ α υѕєя σя gιvє υѕєяι∂/υѕєяηαмє**")
     try:
         await message.chat.restrict_member(
             user_id,
@@ -99,13 +105,13 @@ async def unmute_user(_, message: Message):
 # =========================
 # Promote command
 # =========================
-@Radhe.on_message(filters.command("promote") & filters.group)
+@Radhe.on_message(radhe_command("promote") & filters.group)
 async def promote_user(_, message: Message):
     if not is_allowed_user(message.from_user.id):
         return await message.reply("😏 **ʏσυ ¢αη'τ υѕє τнιѕ ¢σммαη∂**")
     user_id = get_target_user(message)
     if not user_id:
-        return await message.reply("👀 **яєρℓу тσ α υѕєя σя gιvє υѕєяι∂/υѕєяηαмє**")
+        return await message.reply("👀 **яєρℓу τσ α υѕєя σя gιvє υѕєяι∂/υѕєяηαмє**")
     try:
         await message.chat.promote_member(
             user_id,
@@ -123,13 +129,13 @@ async def promote_user(_, message: Message):
 # =========================
 # Demote command
 # =========================
-@Radhe.on_message(filters.command("demote") & filters.group)
+@Radhe.on_message(radhe_command("demote") & filters.group)
 async def demote_user(_, message: Message):
     if not is_allowed_user(message.from_user.id):
         return await message.reply("😏 **ʏσυ ¢αη'τ υѕє τнιѕ ¢σммαη∂**")
     user_id = get_target_user(message)
     if not user_id:
-        return await message.reply("👀 **яєρℓу тσ α υѕєя σя gιvє υѕєяι∂/υѕєяηαмє**")
+        return await message.reply("👀 **яєρℓу τσ α υѕєя σя gιvє υѕєяι∂/υѕєяηαмє**")
     try:
         await message.chat.promote_member(
             user_id,
@@ -147,13 +153,13 @@ async def demote_user(_, message: Message):
 # =========================
 # Kick command
 # =========================
-@Radhe.on_message(filters.command("kick") & filters.group)
+@Radhe.on_message(radhe_command("kick") & filters.group)
 async def kick_user(_, message: Message):
     if not is_allowed_user(message.from_user.id):
         return await message.reply("😏 **ʏσυ ¢αη'τ υѕє τнιѕ ¢σммαη∂**")
     user_id = get_target_user(message)
     if not user_id:
-        return await message.reply("👀 **яєρℓу тσ α υѕєя σя gινє υѕєяι∂/υѕєяηαмє**")
+        return await message.reply("👀 **яєρℓу τσ α υѕєя σя gιvє υѕєяι∂/υѕєяηαмє**")
     try:
         await message.chat.unban_member(user_id)  # kick ke liye temporarily ban & unban
         await message.reply("👢 **υѕєя кιcкє∂ ѕυccєѕѕƒυℓℓγ**")
@@ -163,13 +169,12 @@ async def kick_user(_, message: Message):
 # =========================
 # Pin command
 # =========================
-@Radhe.on_message(filters.command("pin") & filters.group)
+@Radhe.on_message(radhe_command("pin") & filters.group)
 async def pin_message(_, message: Message):
     if not is_allowed_user(message.from_user.id):
-        return await message.reply(""😏 **ʏσυ ¢αη'τ υѕє τнιѕ ¢σммαη∂**")
+        return await message.reply("😏 **ʏσυ ¢αη'τ υѕє τнιѕ ¢σммαη∂**")
     if not message.reply_to_message:
-        return await message.reply("👀 **яєρℓу τσ α мєѕѕαgє τσ ριη ιη gяσυρ
-        **")
+        return await message.reply("👀 **яєρℓу τσ α мєѕѕαgє τσ ριη ιη gяσυρ**")
     try:
         await message.reply_to_message.pin()
         await message.reply("📌 **мєѕѕαgє ριηηє∂ ѕυccєѕѕƒυℓℓγ**")
@@ -179,13 +184,12 @@ async def pin_message(_, message: Message):
 # =========================
 # Unpin command
 # =========================
-@Radhe.on_message(filters.command("unpin") & filters.group)
+@Radhe.on_message(radhe_command("unpin") & filters.group)
 async def unpin_message(_, message: Message):
     if not is_allowed_user(message.from_user.id):
         return await message.reply("😏 **ʏσυ ¢αη'τ υѕє τнιѕ ¢σммαη∂**")
     if not message.reply_to_message:
-        return await message.reply("👀 **яєρℓу τσ α мєѕѕαgє τσ υηριη fяσм τнє gяσυρ
-        **")
+        return await message.reply("👀 **яєρℓу τσ α мєѕѕαgє τσ υηριη fяσм τнє gяσυρ**")
     try:
         await message.reply_to_message.unpin()
         await message.reply("📌 **мєѕѕαgє υηριηηє∂ ѕυccєѕѕƒυℓℓγ**")
