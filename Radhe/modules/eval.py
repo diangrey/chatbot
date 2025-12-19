@@ -27,19 +27,19 @@ async def edit_or_reply(msg: Message, **kwargs):
     await func(**{k: v for k, v in kwargs.items() if k in spec})
 
 
-@RADHE.on_edited_message(
+@Radhe.on_edited_message(
     filters.command("eval")
     & filters.user(OWNER)
     & ~filters.forwarded
     & ~filters.via_bot
 )
-@RADHE.on_message(
+@Radhe.on_message(
     filters.command("eval")
     & filters.user(OWNER)
     & ~filters.forwarded
     & ~filters.via_bot
 )
-async def executor(client: RADHE, message: Message):
+async def executor(client: Radhe, message: Message):
     if len(message.command) < 2:
         return await edit_or_reply(
             message, text="<b>ᴡʜᴀᴛ ʏᴏᴜ ᴡᴀɴɴᴀ ᴇxᴇᴄᴜᴛᴇ ʙᴀʙʏ ?</b>"
@@ -131,13 +131,13 @@ async def executor(client: RADHE, message: Message):
         )
 
 
-@RADHE.on_cb("runtime")
+@Radhe.on_cb("runtime")
 async def runtime_func_cq(_, cq):
     runtime = cq.data.split(None, 1)[1]
     await cq.answer(runtime, show_alert=True)
 
 
-@RADHE.on_cb("forceclose")
+@Radhe.on_cb("forceclose")
 async def forceclose_command(_, CallbackQuery):
     callback_data = CallbackQuery.data.strip()
     callback_request = callback_data.split(None, 1)[1]
@@ -156,19 +156,19 @@ async def forceclose_command(_, CallbackQuery):
         return
 
 
-@RADHE.on_edited_message(
+@Radhe.on_edited_message(
     filters.command("sh")
     & filters.user(OWNER)
     & ~filters.forwarded
     & ~filters.via_bot
 )
-@RADHE.on_message(
+@Radhe.on_message(
     filters.command("sh")
     & filters.user(OWNER)
     & ~filters.forwarded
     & ~filters.via_bot
 )
-async def shellrunner(client: RADHE, message: Message):
+async def shellrunner(client: Radhe, message: Message):
     if len(message.command) < 2:
         return await edit_or_reply(
             message, text="<b>ᴇxᴀᴍᴩʟᴇ :</b>\n/sh git pull"
