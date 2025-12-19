@@ -1,5 +1,3 @@
-import nest_asyncio
-nest_asyncio.apply()
 import logging 
 import time
 from Abg import patch
