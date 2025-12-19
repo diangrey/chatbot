@@ -1,6 +1,6 @@
 
 <h2 align="center">
-    ──「 ᴄʜᴀᴛʙᴏᴛ 」──
+    ──「 𓆩꯭❛ 𝙍𝘼𝘿𝙃𝙀 ❜꯭𓆪⁩ 」──
 </h2>
 <p align="center">
   <img src="https://i.ibb.co/wNRdVdnL/file-3604.jpg">
