@@ -1,14 +1,10 @@
 import os
-import aiohttp
 import tempfile
+import aiohttp
+import aiofiles
 
 from pyrogram import filters
-from pyrogram.types import (
-    Message,
-    InlineKeyboardMarkup,
-    InlineKeyboardButton,
-    CallbackQuery
-)
+from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 
 from Radhe import Radhe
 
@@ -77,67 +73,69 @@ async def callback(_, query: CallbackQuery):
         async with session.get(API + url) as r:
             data = await r.json()
 
-    medias = data.get("medias", [])
-    if not medias:
-        return await status.edit("❌ **Media not available**")
+        medias = data.get("medias", [])
+        if not medias:
+            return await status.edit("❌ **Media not available**")
 
-    selected = None
+        selected = None
 
-    # ---------- YouTube ----------
-    if platform == "yt":
-        if quality == "mp3":
-            for m in medias:
-                if m.get("type") == "audio":
-                    selected = m
-                    break
+        # ---------- YouTube ----------
+        if platform == "yt":
+            if quality == "mp3":
+                for m in medias:
+                    if m.get("type") == "audio":
+                        selected = m
+                        break
+            else:
+                for m in medias:
+                    q_label = m.get("quality", "") or m.get("qualityLabel", "")
+                    if m.get("type") == "video" and quality in q_label:
+                        selected = m
+                        break
+
+        # ---------- Instagram / Pinterest ----------
         else:
-            for m in medias:
-                q_label = m.get("quality", "") or m.get("qualityLabel", "")
-                if m.get("type") == "video" and quality in q_label:
-                    selected = m
-                    break
+            selected = medias[0]
 
-    # ---------- Instagram / Pinterest ----------
-    else:
-        selected = medias[0]
+        # Fallback
+        if not selected:
+            selected = medias[0]
 
-    # ---------- Select media ----------
-if not selected:
-    selected = medias[0]
+        file_url = selected["url"]
+        ext = selected.get("extension", "mp4")
 
-file_url = selected["url"]
-ext = selected.get("extension", "mp4")
+        # ---------- Download file asynchronously ----------
+        tmp_path = None
+        try:
+            # Create temp file
+            tmp_file = tempfile.NamedTemporaryFile(delete=False, suffix=f".{ext}")
+            tmp_path = tmp_file.name
+            tmp_file.close()  # close sync file
 
-# ---------- Download file ----------
-tmp_path = None
-try:
-    with tempfile.NamedTemporaryFile(delete=False, suffix=f".{ext}") as tmp:
-        tmp_path = tmp.name
-        async with session.get(file_url) as f:
-            while True:
-                chunk = await f.content.read(65536)
-                if not chunk:
-                    break
-                tmp.write(chunk)
+            # Async download to temp file
+            async with session.get(file_url) as resp:
+                async with aiofiles.open(tmp_path, 'wb') as f:
+                    async for chunk in resp.content.iter_chunked(65536):
+                        await f.write(chunk)
 
-    # ---------- Send ----------
-    if ext == "mp3":
-        await query.message.reply_audio(
-            audio=tmp_path,
-            caption="🎧 **ʜєяє ιѕ үσυя αυ∂ισ**"
-        )
-    elif ext.lower() in ["jpg", "jpeg", "png"]:
-        await query.message.reply_photo(
-            photo=tmp_path,
-            caption="🖼 **ʜєяє ιѕ үσυя ιмαgє**"
-        )
-    else:
-        await query.message.reply_video(
-            video=tmp_path,
-            caption="🎬 **ʜєяє ιѕ үσυя νι∂єσ**"
-        )
+            # ---------- Send to Telegram ----------
+            if ext == "mp3":
+                await query.message.reply_audio(
+                    audio=tmp_path,
+                    caption="🎧 **ʜєяє ιѕ үσυя αυ∂ισ**"
+                )
+            elif ext.lower() in ["jpg", "jpeg", "png"]:
+                await query.message.reply_photo(
+                    photo=tmp_path,
+                    caption="🖼 **ʜєяє ιѕ үσυя ιмαgє**"
+                )
+            else:
+                await query.message.reply_video(
+                    video=tmp_path,
+                    caption="🎬 **ʜєяє ιѕ үσυя νι∂єσ**"
+                )
 
-finally:
-    if tmp_path and os.path.exists(tmp_path):
-        os.remove(tmp_path)
-    await status.delete()
+        finally:
+            if tmp_path and os.path.exists(tmp_path):
+                os.remove(tmp_path)
+            await status.delete()
