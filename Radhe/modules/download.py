@@ -101,7 +101,8 @@ async def callback(_, query: CallbackQuery):
     else:
         selected = medias[0]
 
-    if not selected:
+    # ---------- Select media ----------
+if not selected:
     selected = medias[0]
 
 file_url = selected["url"]
@@ -139,39 +140,4 @@ try:
 finally:
     if tmp_path and os.path.exists(tmp_path):
         os.remove(tmp_path)
-    await status.delete() if not selected:
-        selected = medias[0]
-
-    file_url = selected["url"]
-    ext = selected.get("extension", "mp4")
-
-    # ---------- Download file ----------
-    with tempfile.NamedTemporaryFile(delete=False, suffix="." + ext) as tmp:
-        tmp_path = tmp.name
-        async with session.get(file_url) as f:
-            while True:
-                chunk = await f.content.read(65536)
-                if not chunk:
-                    break
-                tmp.write(chunk)
-
-    # ---------- Send ----------
-    try:
-        if ext == "mp3":
-            await query.message.reply_audio(
-                audio=tmp_path,
-                caption="🎧 **ʜєяє ιѕ үσυя αυ∂ισ**"
-            )
-        elif ext in ["jpg", "png", "jpeg"]:
-            await query.message.reply_photo(
-                photo=tmp_path,
-                caption="🖼 **ʜєяє ιѕ үσυя ιмαgє**"
-            )
-        else:
-            await query.message.reply_video(
-                video=tmp_path,
-                caption="🎬 **ʜєяє ιѕ үσυя νι∂єσ**"
-            )
-    finally:
-        os.remove(tmp_path)
-        await status.delete()
+    await status.delete()
