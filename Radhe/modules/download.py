@@ -1,5 +1,6 @@
 import aiohttp
 import asyncio
+import io
 
 from pyrogram import filters
 from pyrogram.types import Message
@@ -14,10 +15,10 @@ API_URL = "https://last-warning.serv00.net/md.php?url="
 async def download_video(_, message: Message):
     if len(message.command) < 2:
         return await message.reply_text(
-            "**❌ ᴘʟᴇᴀsᴇ ᴘʀᴏᴠɪᴅᴇ ᴀ ʟɪɴᴋ**\n\n`/download <social_media_link>`"
+            "**❌ ᴘʟᴇᴀsᴇ ᴘʀᴏᴠɪᴅᴇ ᴀ ʟɪɴᴋ**\n\n`Radhe download <link>`"
         )
 
-    link = message.text.split(None, 1)[1]
+    link = message.text.split(None, 2)[2]
 
     wait_msg = await message.reply_text(
         "đøωηℓσαđιηg ყσυя яєqυєѕт βαву… ρℓєαѕє ωαιт 🫶"
@@ -27,15 +28,17 @@ async def download_video(_, message: Message):
         async with aiohttp.ClientSession() as session:
             async with session.get(API_URL + link) as resp:
                 if resp.status != 200:
-                    await wait_msg.edit("❌ **ғᴀɪʟᴇᴅ ᴛᴏ ғᴇᴛᴄʜ ᴠɪᴅᴇᴏ**")
-                    return
+                    return await wait_msg.edit("❌ **ғᴀɪʟᴇᴅ ᴛᴏ ғᴇᴛᴄʜ ᴠɪᴅᴇᴏ**")
 
                 video_bytes = await resp.read()
+
+        video_file = io.BytesIO(video_bytes)
+        video_file.name = "radhe_video.mp4"
 
         await wait_msg.delete()
 
         await message.reply_video(
-            video=video_bytes,
+            video=video_file,
             caption="❤️ **ʜᴇʀᴇ ɪs ʏᴏᴜʀ ᴠɪᴅᴇᴏ**",
         )
 
